@@ -12,3 +12,50 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model user {
+  id       Int       @id @default(autoincrement())
+  email    String?   @unique //나중에 이메일 받게 되면 다시 수정
+  username String?
+  profile   Profile[]
+  refreshTokens     RefreshToken[]
+  kakaoId           BigInt?        @unique // 카카오 ID 추가
+  kakaoAccessToken  String? // 카카오 액세스 토큰 추가
+  kakaoRefreshToken String? // 카카오 리프레시 토큰 추가
+}
+
+model RefreshToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  userId    Int
+  user      user     @relation(fields: [userId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Profile {
+  id     Int   @id @default(autoincrement())
+  user   user? @relation(fields: [userId], references: [id])
+  userId Int?
+}
+
+model Policy {
+  serviceID             String  @id @default(cuid())
+  supportType           String
+  serviceName           String
+  servicePurpose        String
+  applicationDeadline   String
+  supportTarget         String
+  selectionCriteria     String
+  supportDetails        String
+  applicationMethod     String
+  requiredDocuments     String
+  receptionAgencyName   String
+  contactInfo           String
+  onlineApplicationURL  String
+  lastModified          String
+  responsibleAgencyName String
+  administrativeRules   String
+  autonomousRegulations String
+  laws                  String
+}
