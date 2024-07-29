@@ -1,6 +1,5 @@
 import { Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { LocalStrategy } from './strategies/local.strategy';
 import { UserModule } from 'src/user/user.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
@@ -18,7 +17,7 @@ import { KakaoStrategy } from './strategies/kakao.strategy';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, KakaoStrategy, JwtStrategy],
+  providers: [AuthService, KakaoStrategy, JwtStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}
