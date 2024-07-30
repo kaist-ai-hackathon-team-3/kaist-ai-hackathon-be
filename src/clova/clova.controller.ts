@@ -13,8 +13,7 @@ export class ClovaController {
     description: 'Payload containing the chat message data',
     schema: {
       example: {
-        message: 'Hello, Clova!',
-        userId: 123,
+        messages: 'Hello, Clova!',
       },
     },
   })
