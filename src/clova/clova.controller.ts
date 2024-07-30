@@ -23,6 +23,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 export class ClovaController {
   constructor(private clovaService: ClovaService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post('chat')
   @ApiOperation({ summary: 'Send a message to the Clova chat service' })
   @ApiBody({

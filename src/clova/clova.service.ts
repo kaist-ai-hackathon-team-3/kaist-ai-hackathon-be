@@ -20,9 +20,11 @@ export class ClovaService {
       ],
     };
 
+    console.log(process.env.X_NCP_CLOVASTUDIO_API_KEY);
     const headers = {
-      'X-NCP-CLOVASTUDIO-API-KEY': 'YOUR_CLOVA_API_KEY',
-      'X-NCP-APIGW-API-KEY': 'YOUR_API_GATEWAY_KEY',
+      'X-NCP-CLOVASTUDIO-API-KEY':
+        'NTA0MjU2MWZlZTcxNDJiY5cfv1nWk9U3HrCITPYSmGGtZCkEcUOiCpGYCGGFBq75',
+      'X-NCP-APIGW-API-KEY': process.env.X_NCP_APIGW_API_KEY,
       'Content-Type': 'application/json',
     };
 
