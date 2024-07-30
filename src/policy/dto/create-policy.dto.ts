@@ -16,4 +16,5 @@ export class CreatePolicyDto {
   administrativeRules: string;
   autonomousRegulations: string;
   laws: string;
+  userIds?: number[];
 }

@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { PolicyService } from './policy.service';
 import { CreatePolicyDto } from './dto/create-policy.dto';
 import { UpdatePolicyDto } from './dto/update-policy.dto';
@@ -22,9 +30,19 @@ export class PolicyController {
     return this.policyService.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePolicyDto: UpdatePolicyDto) {
-    return this.policyService.update(+id, updatePolicyDto);
+  @Patch(':id/:userId')
+  async update(
+    @Param('id') id: string,
+    @Param('userId') userId: string,
+    @Body('action') action: 'add' | 'remove', // action 파라미터로 추가 또는 제거를 지정
+  ) {
+    if (action === 'add') {
+      return this.policyService.addUser(+id, +userId);
+    } else if (action === 'remove') {
+      return this.policyService.removeUser(+id, +userId);
+    } else {
+      throw new Error('Invalid action');
+    }
   }
 
   @Delete(':id')

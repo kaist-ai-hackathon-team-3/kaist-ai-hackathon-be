@@ -49,4 +49,25 @@ export class PolicyService {
   remove(id: number) {
     return `This action removes a #${id} policy`;
   }
+  async addUser(policyId: number, userId: number) {
+    const stringPolicyId = policyId.toString();
+
+    return this.prismaService.policyOnUsers.create({
+      data: {
+        userId: userId,
+        policyId: stringPolicyId,
+      },
+    });
+  }
+
+  async removeUser(policyId: number, userId: number) {
+    const stringPolicyId = policyId.toString();
+
+    return this.prismaService.policyOnUsers.deleteMany({
+      where: {
+        userId: userId,
+        policyId: stringPolicyId,
+      },
+    });
+  }
 }
