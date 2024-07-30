@@ -17,6 +17,13 @@ import { UserDto } from './dto/user.dto';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  //현재 유저 기능이 필요한 파트
+
+  /*
+  - [ ] 프로필 창
+  - [ ] 채팅에서 '누구'의  '아들'에서 필요
+  */
+
   @Get()
   @ApiOperation({ summary: 'Retrieve all users' })
   @ApiResponse({ status: 200, description: 'List of users', type: [UserDto] })
@@ -25,8 +32,8 @@ export class UserController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('profile')
-  @ApiOperation({ summary: 'Get profile of the currently logged-in user' })
+  @Get('me')
+  @ApiOperation({ summary: '로그인한 유저의 정보를 가져옵니다.' })
   @ApiResponse({
     status: 200,
     description: 'Profile information of the logged-in user',
@@ -36,44 +43,6 @@ export class UserController {
   getProfile(@Request() req): UserDto {
     return req.user;
   }
-
-  @Get(':id')
-  @ApiOperation({ summary: 'Retrieve a user by ID' })
-  @ApiParam({
-    name: 'id',
-    type: Number,
-    description: 'ID of the user to retrieve',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Details of the user',
-    type: UserDto,
-  })
-  @ApiResponse({ status: 404, description: 'User not found' })
-  async getUserById(@Param('id', ParseIntPipe) id: number): Promise<UserDto> {
-    return this.userService.getUserById(id);
-  }
-
-  // @Put(':id')
-  // @ApiOperation({ summary: 'Update user details by ID' })
-  // @ApiParam({
-  //   name: 'id',
-  //   type: Number,
-  //   description: 'ID of the user to update',
-  // })
-  // @ApiBody({ type: UpdateUserDto })
-  // @ApiResponse({
-  //   status: 200,
-  //   description: 'User successfully updated',
-  //   type: UserDto,
-  // })
-  // @ApiResponse({ status: 404, description: 'User not found' })
-  // async updateUser(
-  //   @Param('id', ParseIntPipe) id: number,
-  //   @Body() updateUserDto: UpdateUserDto,
-  // ): Promise<UserDto> {
-  //   return this.userService.updateUser(id, updateUserDto);
-  // }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a user by ID' })
