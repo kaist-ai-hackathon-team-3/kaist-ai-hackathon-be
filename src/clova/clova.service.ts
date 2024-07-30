@@ -30,7 +30,7 @@ export class ClovaService {
           { headers },
         ),
       );
-      return response.data;
+      return response.data.result.message.content;
     } catch (error) {
       console.error('Error', error.response?.data || error.message);
       throw error;
