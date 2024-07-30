@@ -41,7 +41,7 @@ export class ProfileController {
   @ApiOperation({ summary: '로그인한 유저의 모든 프로필 불러오기' })
   @ApiResponse({ status: 201, description: '성공', type: CreateProfileDto })
   @Get()
-  findOne(@Request() req) {
+  findUserProfile(@Request() req) {
     return this.profileService.findByUser(req.user.id);
   }
 
