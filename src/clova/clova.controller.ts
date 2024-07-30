@@ -1,6 +1,22 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
+import { UserService } from 'src/user/user.service';
 import { ClovaService } from './clova.service';
-import { ApiTags, ApiOperation, ApiBody, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiBody,
+  ApiResponse,
+  ApiParam,
+} from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @ApiTags('Clova')
 @Controller('clova')
@@ -28,7 +44,43 @@ export class ClovaController {
   })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
-  chat(@Body() data: any): Promise<any> {
-    return this.clovaService.postchat(data);
+  async chat(@Req() req, @Body() data: any): Promise<any> {
+    const userId = req.user.id;
+    const response = await this.clovaService.postchat(data, userId);
+    await this.clovaService.saveConversation(data, response, userId);
+    return response;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('conversations/:userId')
+  @ApiOperation({ summary: 'Get all conversations for a user' })
+  @ApiParam({
+    name: 'userId',
+    description: 'ID of the user whose conversations are to be retrieved',
+    type: Number,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'List of conversations for the user',
+    schema: {
+      example: [
+        {
+          id: 1,
+          userId: 1,
+          messages: [
+            { role: 'user', content: 'Hello!' },
+            { role: 'assistant', content: 'Hi there!' },
+          ],
+          createdAt: '2024-07-30T00:00:00.000Z',
+          updatedAt: '2024-07-30T00:00:00.000Z',
+        },
+      ],
+    },
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 404, description: 'User not found' })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  async getConversations(@Param('userId') userId: number): Promise<any[]> {
+    return this.clovaService.getConversations(userId);
   }
 }

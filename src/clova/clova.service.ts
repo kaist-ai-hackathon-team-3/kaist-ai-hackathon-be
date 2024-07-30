@@ -1,12 +1,16 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../prisma/prisma.service'; // Prisma 서비스 추가
 import { firstValueFrom } from 'rxjs';
 
 @Injectable()
 export class ClovaService {
-  constructor(private httpService: HttpService) {}
+  constructor(
+    private httpService: HttpService,
+    private prisma: PrismaService, // Prisma 서비스 주입
+  ) {}
 
-  async postchat(data: any): Promise<any> {
+  async postchat(data: any, userId: number): Promise<any> {
     const newData = {
       messages: [
         {
@@ -17,11 +21,11 @@ export class ClovaService {
     };
 
     const headers = {
-      'X-NCP-CLOVASTUDIO-API-KEY':
-        'NTA0MjU2MWZlZTcxNDJiY5cfv1nWk9U3HrCITPYSmGGtZCkEcUOiCpGYCGGFBq75',
-      'X-NCP-APIGW-API-KEY': 'd04XtbK3yPlca71vDqUmgKRHyhhclvmrptVHktM9',
+      'X-NCP-CLOVASTUDIO-API-KEY': 'YOUR_CLOVA_API_KEY',
+      'X-NCP-APIGW-API-KEY': 'YOUR_API_GATEWAY_KEY',
       'Content-Type': 'application/json',
     };
+
     try {
       const response = await firstValueFrom(
         this.httpService.post(
@@ -35,5 +39,28 @@ export class ClovaService {
       console.error('Error', error.response?.data || error.message);
       throw error;
     }
+  }
+
+  async saveConversation(
+    data: any,
+    response: any,
+    userId: number,
+  ): Promise<void> {
+    await this.prisma.conversation.create({
+      data: {
+        userId,
+        messages: JSON.stringify([
+          { role: 'user', content: data.messages },
+          { role: 'assistant', content: response.content },
+        ]),
+      },
+    });
+  }
+
+  async getConversations(userId: number): Promise<any[]> {
+    return this.prisma.conversation.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' }, // 최신 대화가 먼저 보이도록 정렬
+    });
   }
 }
