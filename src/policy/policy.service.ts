@@ -18,7 +18,7 @@ export class PolicyService {
           'https://api.odcloud.kr/api/gov24/v3/serviceDetail?page=1&perPage=2000&serviceKey=tMW7HjUow9pR8Otha9TtbcOEGHeGdAZBSo%2Fq%2FkTzXKodD%2Fi%2BvzXdcCMY0tyzq%2FrVRmT%2FdYRdZVNHL%2BoH%2FMC6Tg%3D%3D',
         ),
       );
-      return response;
+      return { law: response.data.법령 };
     } catch (error) {
       console.error('Error', error.response?.data || error.message);
       throw error;

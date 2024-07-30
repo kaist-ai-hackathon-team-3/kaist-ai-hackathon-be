@@ -34,7 +34,7 @@ export class UserDto {
   })
   @IsBigInt()
   @IsOptional()
-  kakaoId?: BigInt;
+  kakaoId?: bigint;
 
   @ApiProperty({
     description: 'Kakao access token for the user',
