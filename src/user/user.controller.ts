@@ -41,8 +41,7 @@ export class UserController {
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   getMe(@Request() req): any {
-    console.log(req.user);
-    return req.id;
+    return req.user;
   }
 
   @UseGuards(JwtAuthGuard)
@@ -59,7 +58,7 @@ export class UserController {
     type: UserDto,
   })
   @ApiResponse({ status: 404, description: 'User not found' })
-  async deleteUser(@Param('id', ParseIntPipe) id: number): Promise<UserDto> {
-    return this.userService.deleteUser(id);
+  async deleteUser(@Request() req): Promise<UserDto> {
+    return this.userService.deleteUser(req.user.id);
   }
 }
