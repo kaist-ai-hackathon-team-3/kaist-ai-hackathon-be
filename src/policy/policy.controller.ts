@@ -6,19 +6,15 @@ import {
   Patch,
   Param,
   Delete,
-  HttpCode,
-  HttpStatus,
 } from '@nestjs/common';
 import { PolicyService } from './policy.service';
 import { CreatePolicyDto } from './dto/create-policy.dto';
-import { UpdatePolicyDto } from './dto/update-policy.dto';
 import {
   ApiTags,
   ApiOperation,
   ApiResponse,
   ApiBody,
   ApiParam,
-  ApiQuery,
 } from '@nestjs/swagger';
 
 @ApiTags('Policy')
@@ -27,15 +23,15 @@ export class PolicyController {
   constructor(private readonly policyService: PolicyService) {}
 
   @Post()
-  @ApiOperation({ summary: 'Create a new policy' })
+  @ApiOperation({ summary: '정부24에서 받은 정책 2000개 db에 저장' })
   @ApiBody({ type: CreatePolicyDto })
   @ApiResponse({
     status: 201,
     description: 'The policy has been successfully created.',
   })
   @ApiResponse({ status: 400, description: 'Bad Request' })
-  create(@Body() createPolicyDto: CreatePolicyDto) {
-    return this.policyService.create(createPolicyDto);
+  create() {
+    return this.policyService.create();
   }
 
   @Get()
@@ -47,7 +43,7 @@ export class PolicyController {
   })
   @ApiResponse({ status: 404, description: 'Not Found' })
   findAll() {
-    return this.policyService.findAll();
+    return this.policyService.getApi();
   }
 
   @Get(':id')
