@@ -23,8 +23,7 @@ model user {
   kakaoAccessToken  String? // 카카오 액세스 토큰 추가
   kakaoRefreshToken String? // 카카오 리프레시 토큰 추가
   policies          PolicyOnUsers[] 
-  conversations     Conversation[]
-
+  chatRooms         ChatRoom[]
 }
 
 model RefreshToken {
@@ -79,11 +78,20 @@ model PolicyOnUsers {
   @@id([userId, policyId])
 }
 
-model Conversation {
+model ChatRoom {
   id        Int      @id @default(autoincrement())
   userId    Int
+  user      user     @relation(fields: [userId], references: [id])
+  conversations Conversation[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Conversation {
+  id        Int      @id @default(autoincrement())
+  chatRoomId Int
+  chatRoom  ChatRoom @relation(fields: [chatRoomId], references: [id])
   messages  Json     // 대화 메시지를 JSON 형태로 저장
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  user      user     @relation(fields: [userId], references: [id])
 }
