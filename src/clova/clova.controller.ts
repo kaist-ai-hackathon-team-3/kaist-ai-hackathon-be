@@ -20,6 +20,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @ApiTags('Clova')
 @Controller('clova')
+@UseGuards(JwtAuthGuard)
 export class ClovaController {
   constructor(private clovaService: ClovaService) {}
 
@@ -46,6 +47,7 @@ export class ClovaController {
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   async chat(@Req() req, @Body() data: any): Promise<any> {
+    console.log(req.user);
     const userId = req.user.id;
     const response = await this.clovaService.postchat(data, userId);
     await this.clovaService.saveConversation(data, response, userId);
