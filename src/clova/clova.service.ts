@@ -2,12 +2,14 @@ import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service'; // Prisma 서비스 추가
 import { firstValueFrom } from 'rxjs';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class ClovaService {
   constructor(
     private httpService: HttpService,
-    private prisma: PrismaService, // Prisma 서비스 주입
+    private prisma: PrismaService,
+    private configService: ConfigService,
   ) {}
 
   async postchat(data: any, userId: number): Promise<any> {
@@ -22,9 +24,12 @@ export class ClovaService {
 
     console.log(process.env.X_NCP_CLOVASTUDIO_API_KEY);
     const headers = {
-      'X-NCP-CLOVASTUDIO-API-KEY':
-        'NTA0MjU2MWZlZTcxNDJiY5cfv1nWk9U3HrCITPYSmGGtZCkEcUOiCpGYCGGFBq75',
-      'X-NCP-APIGW-API-KEY': process.env.X_NCP_APIGW_API_KEY,
+      'X-NCP-CLOVASTUDIO-API-KEY': this.configService.get<string>(
+        'X_NCP_CLOVASTUDIO_API_KEY',
+      ),
+      'X-NCP-APIGW-API-KEY': this.configService.get<string>(
+        'X_NCP_APIGW_API_KEY',
+      ),
       'Content-Type': 'application/json',
     };
 
