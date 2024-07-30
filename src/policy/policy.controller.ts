@@ -6,31 +6,90 @@ import {
   Patch,
   Param,
   Delete,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { PolicyService } from './policy.service';
 import { CreatePolicyDto } from './dto/create-policy.dto';
 import { UpdatePolicyDto } from './dto/update-policy.dto';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBody,
+  ApiParam,
+  ApiQuery,
+} from '@nestjs/swagger';
 
+@ApiTags('Policy')
 @Controller('policy')
 export class PolicyController {
   constructor(private readonly policyService: PolicyService) {}
 
   @Post()
+  @ApiOperation({ summary: 'Create a new policy' })
+  @ApiBody({ type: CreatePolicyDto })
+  @ApiResponse({
+    status: 201,
+    description: 'The policy has been successfully created.',
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
   create(@Body() createPolicyDto: CreatePolicyDto) {
     return this.policyService.create(createPolicyDto);
   }
 
   @Get()
+  @ApiOperation({ summary: 'Retrieve all policies' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of policies',
+    type: [CreatePolicyDto], // Adjust if you have a specific DTO for responses
+  })
+  @ApiResponse({ status: 404, description: 'Not Found' })
   findAll() {
     return this.policyService.findAll();
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Retrieve a policy by ID' })
+  @ApiParam({
+    name: 'id',
+    type: String,
+    description: 'The ID of the policy to retrieve',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Details of the policy',
+    type: CreatePolicyDto, // Adjust if you have a specific DTO for responses
+  })
+  @ApiResponse({ status: 404, description: 'Policy not found' })
   findOne(@Param('id') id: string) {
     return this.policyService.findOne(+id);
   }
 
   @Patch(':id/:userId')
+  @ApiOperation({ summary: 'Update policy by adding or removing a user' })
+  @ApiParam({
+    name: 'id',
+    type: String,
+    description: 'The ID of the policy to update',
+  })
+  @ApiParam({
+    name: 'userId',
+    type: String,
+    description: 'The ID of the user to add or remove',
+  })
+  @ApiBody({
+    type: String,
+    enum: ['add', 'remove'],
+    description: 'Action to be performed: add or remove user',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Policy updated successfully',
+  })
+  @ApiResponse({ status: 404, description: 'Policy or user not found' })
+  @ApiResponse({ status: 400, description: 'Invalid action provided' })
   async update(
     @Param('id') id: string,
     @Param('userId') userId: string,
@@ -46,6 +105,18 @@ export class PolicyController {
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Delete a policy by ID' })
+  @ApiParam({
+    name: 'id',
+    type: String,
+    description: 'The ID of the policy to delete',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Policy successfully deleted',
+  })
+  @ApiResponse({ status: 404, description: 'Policy not found' })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
   remove(@Param('id') id: string) {
     return this.policyService.remove(+id);
   }
