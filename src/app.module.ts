@@ -9,7 +9,14 @@ import { ClovaModule } from './clova/clova.module';
 import { PolicyModule } from './policy/policy.module';
 
 @Module({
-  imports: [AuthModule, UserModule, PrismaModule, ProfileModule, ClovaModule, PolicyModule],
+  imports: [
+    AuthModule,
+    UserModule,
+    PrismaModule,
+    ProfileModule,
+    ClovaModule,
+    PolicyModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
