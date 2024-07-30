@@ -1,27 +1,16 @@
 import {
-  Body,
   Controller,
   Delete,
   Get,
   Param,
   ParseIntPipe,
-  Post,
-  Put,
   Request,
   UseGuards,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { Prisma } from '@prisma/client';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import {
-  ApiTags,
-  ApiOperation,
-  ApiResponse,
-  ApiBody,
-  ApiParam,
-} from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
 import { UserDto } from './dto/user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 
 @ApiTags('user')
 @Controller('user')
