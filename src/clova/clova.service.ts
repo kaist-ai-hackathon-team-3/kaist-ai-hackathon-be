@@ -64,9 +64,10 @@ export class ClovaService {
     });
   }
 
-  async getConversations(userId: number): Promise<any[]> {
+  async getConversations(userIdStr: string): Promise<any[]> {
+    const userId = Number(userIdStr);
     return this.prisma.conversation.findMany({
-      where: { userId },
+      where: { userId: userId },
       orderBy: { createdAt: 'desc' }, // 최신 대화가 먼저 보이도록 정렬
     });
   }

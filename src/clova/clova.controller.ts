@@ -83,7 +83,7 @@ export class ClovaController {
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 404, description: 'User not found' })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
-  async getConversations(@Param('userId') userId: number): Promise<any[]> {
+  async getConversations(@Param('userId') userId: string): Promise<any[]> {
     return this.clovaService.getConversations(userId);
   }
 }
