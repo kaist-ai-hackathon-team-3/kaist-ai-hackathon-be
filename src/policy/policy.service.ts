@@ -62,6 +62,61 @@ export class PolicyService {
     }
   }
 
+  async findByCategory(id: number) {
+    const categoryKeywords = {
+      1: ['기초'],
+      2: ['주택'],
+      3: ['고용', '소상공인', '창업', '기업'],
+      4: ['마약', '감염병', '노인', '치매', '보건', '의료', '건강', '결핵'],
+      5: ['폭력', '보호', '범죄', '자살'],
+      6: ['아동', '청소년', '입양', '가족', '가정', '모자'],
+      7: ['체육', '문화', '예술', '관광'],
+      8: [
+        '입업',
+        '어업',
+        '해양',
+        '원양',
+        '어촌',
+        '탄소',
+        '종자',
+        '수목원',
+        '산림',
+        '목재',
+        '식물',
+        '낚시',
+        '어장',
+        '해상',
+        '수산',
+        '귀촌',
+        '항로',
+        '해운',
+        '어선',
+      ],
+      9: ['북한', '다문화'],
+      10: ['군인', '특수임무수행자', '국가유공자', '전쟁', '국방'],
+      11: ['과학', '교육'],
+      12: [],
+    };
+
+    const keywords = categoryKeywords[id] || [];
+
+    if (keywords.length === 0) {
+      return []; // 키워드가 없는 카테고리는 빈 배열 반환
+    }
+
+    const policies = await this.prismaService.policy.findMany({
+      where: {
+        OR: keywords.map((keyword) => ({
+          laws: {
+            contains: keyword,
+          },
+        })),
+      },
+    });
+
+    return policies;
+  }
+
   findAll() {
     return `This action returns all policy`;
   }

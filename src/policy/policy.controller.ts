@@ -63,6 +63,23 @@ export class PolicyController {
     return this.policyService.findOne(+id);
   }
 
+  @Get('/category/:id')
+  @ApiOperation({ summary: 'Retrieve a policy by ID' })
+  @ApiParam({
+    name: 'id',
+    type: String,
+    description: 'categoryID로 해당 카테고리의 모든 정책 불러오기',
+  })
+  @ApiResponse({
+    status: 200,
+    description: '해당 category의 정책 목록',
+    type: CreatePolicyDto, // Adjust if you have a specific DTO for responses
+  })
+  @ApiResponse({ status: 404, description: 'Policy not found' })
+  findByCategory(@Param('id') id: string) {
+    return this.policyService.findByCategory(+id);
+  }
+
   @Patch(':id/:userId')
   @ApiOperation({ summary: 'Update policy by adding or removing a user' })
   @ApiParam({
