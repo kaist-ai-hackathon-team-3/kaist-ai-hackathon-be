@@ -30,13 +30,6 @@ export class ProfileController {
     return this.profileService.create(createProfileDto);
   }
 
-  @Get()
-  @ApiOperation({ summary: '모든 프로필 불러오기' })
-  @ApiResponse({ status: 201, description: '성공', type: [CreateProfileDto] })
-  findAll() {
-    return this.profileService.findAll();
-  }
-
   @ApiOperation({ summary: 'id에 따른 프로필 불러오기' })
   @ApiResponse({ status: 201, description: '성공', type: CreateProfileDto })
   @Get(':id')

@@ -40,10 +40,12 @@ export class UserController {
     type: UserDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  getProfile(@Request() req): UserDto {
-    return req.user;
+  getMe(@Request() req): any {
+    console.log(req.user);
+    return req.id;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a user by ID' })
   @ApiParam({
