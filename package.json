@@ -30,6 +30,7 @@
     "@nestjs/swagger": "^7.4.0",
     "@prisma/client": "^5.17.0",
     "class-validator": "^0.14.1",
+    "class-validator-extended": "^4.0.0",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-kakao": "^1.0.1",

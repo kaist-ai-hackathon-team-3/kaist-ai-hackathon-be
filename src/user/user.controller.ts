@@ -65,26 +65,26 @@ export class UserController {
     return this.userService.getUserById(id);
   }
 
-  @Put(':id')
-  @ApiOperation({ summary: 'Update user details by ID' })
-  @ApiParam({
-    name: 'id',
-    type: Number,
-    description: 'ID of the user to update',
-  })
-  @ApiBody({ type: UpdateUserDto })
-  @ApiResponse({
-    status: 200,
-    description: 'User successfully updated',
-    type: UserDto,
-  })
-  @ApiResponse({ status: 404, description: 'User not found' })
-  async updateUser(
-    @Param('id', ParseIntPipe) id: number,
-    @Body() updateUserDto: UpdateUserDto,
-  ): Promise<UserDto> {
-    return this.userService.updateUser(id, updateUserDto);
-  }
+  // @Put(':id')
+  // @ApiOperation({ summary: 'Update user details by ID' })
+  // @ApiParam({
+  //   name: 'id',
+  //   type: Number,
+  //   description: 'ID of the user to update',
+  // })
+  // @ApiBody({ type: UpdateUserDto })
+  // @ApiResponse({
+  //   status: 200,
+  //   description: 'User successfully updated',
+  //   type: UserDto,
+  // })
+  // @ApiResponse({ status: 404, description: 'User not found' })
+  // async updateUser(
+  //   @Param('id', ParseIntPipe) id: number,
+  //   @Body() updateUserDto: UpdateUserDto,
+  // ): Promise<UserDto> {
+  //   return this.userService.updateUser(id, updateUserDto);
+  // }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a user by ID' })
