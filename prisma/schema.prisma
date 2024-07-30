@@ -49,23 +49,23 @@ model Profile {
 
 model Policy {
   serviceID             String @id @default(cuid())
-  supportType           String
-  serviceName           String
-  servicePurpose        String
-  applicationDeadline   String
-  supportTarget         String
-  selectionCriteria     String
-  supportDetails        String
-  applicationMethod     String
-  requiredDocuments     String
-  receptionAgencyName   String
-  contactInfo           String
-  onlineApplicationURL  String
-  lastModified          String
-  responsibleAgencyName String
-  administrativeRules   String
-  autonomousRegulations String
-  laws                  String
+  supportType           String?
+  serviceName           String?
+  servicePurpose        String?
+  applicationDeadline   String?
+  supportTarget         String?
+  selectionCriteria     String?
+  supportDetails        String?
+  applicationMethod     String?
+  requiredDocuments     String?
+  receptionAgencyName   String?
+  contactInfo           String?
+  onlineApplicationURL  String?
+  lastModified          String?
+  responsibleAgencyName String?
+  administrativeRules   String?
+  autonomousRegulations String?
+  laws                  String?
   users                 PolicyOnUsers[]
 }
 

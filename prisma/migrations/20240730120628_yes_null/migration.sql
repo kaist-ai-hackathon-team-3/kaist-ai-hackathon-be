@@ -1,0 +1,18 @@
+-- AlterTable
+ALTER TABLE "Policy" ALTER COLUMN "supportType" DROP NOT NULL,
+ALTER COLUMN "serviceName" DROP NOT NULL,
+ALTER COLUMN "servicePurpose" DROP NOT NULL,
+ALTER COLUMN "applicationDeadline" DROP NOT NULL,
+ALTER COLUMN "supportTarget" DROP NOT NULL,
+ALTER COLUMN "selectionCriteria" DROP NOT NULL,
+ALTER COLUMN "supportDetails" DROP NOT NULL,
+ALTER COLUMN "applicationMethod" DROP NOT NULL,
+ALTER COLUMN "requiredDocuments" DROP NOT NULL,
+ALTER COLUMN "receptionAgencyName" DROP NOT NULL,
+ALTER COLUMN "contactInfo" DROP NOT NULL,
+ALTER COLUMN "onlineApplicationURL" DROP NOT NULL,
+ALTER COLUMN "lastModified" DROP NOT NULL,
+ALTER COLUMN "responsibleAgencyName" DROP NOT NULL,
+ALTER COLUMN "administrativeRules" DROP NOT NULL,
+ALTER COLUMN "autonomousRegulations" DROP NOT NULL,
+ALTER COLUMN "laws" DROP NOT NULL;

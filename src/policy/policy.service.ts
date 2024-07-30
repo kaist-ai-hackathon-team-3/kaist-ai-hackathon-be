@@ -31,7 +31,7 @@ export class PolicyService {
     const apiData = await this.getApi();
 
     const policyData = apiData.data.map((item) => ({
-      serviceId: item.서비스ID,
+      serviceID: item.서비스ID,
       supportType: item.지원유형,
       serviceName: item.서비스명,
       servicePurpose: item.서비스목적,
