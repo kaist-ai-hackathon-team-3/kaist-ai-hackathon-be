@@ -6,6 +6,10 @@ import {
   Patch,
   Param,
   Delete,
+  Request,
+  UseGuards,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { ProfileService } from './profile.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
@@ -17,32 +21,46 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 @ApiTags('profile')
 @Controller('profile')
 export class ProfileController {
   constructor(private readonly profileService: ProfileService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   @ApiOperation({ summary: '새 프로필 생성' })
   @ApiBody({ type: CreateProfileDto })
   @ApiResponse({ status: 201, description: '성공', type: CreateProfileDto })
-  create(@Body() createProfileDto: CreateProfileDto) {
-    return this.profileService.create(createProfileDto);
+  create(@Request() req, @Body() createProfileDto: CreateProfileDto) {
+    const data = { userId: req.user.id, ...createProfileDto };
+    return this.profileService.create(data);
   }
 
-  @ApiOperation({ summary: 'id에 따른 프로필 불러오기' })
+  @UseGuards(JwtAuthGuard)
+  @ApiOperation({ summary: '로그인한 유저의 모든 프로필 불러오기' })
   @ApiResponse({ status: 201, description: '성공', type: CreateProfileDto })
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.profileService.findOne(+id);
+  @Get()
+  findOne(@Request() req) {
+    return this.profileService.findByUser(req.user.id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   @ApiOperation({ summary: '프로필 업데이트' })
   @ApiParam({ name: 'id', required: true, description: '프로필 ID' })
   @ApiResponse({ status: 200, description: '성공', type: UpdateProfileDto })
-  update(@Param('id') id: string, @Body() updateProfileDto: UpdateProfileDto) {
-    return this.profileService.update(+id, updateProfileDto);
+  async update(
+    @Request() req,
+    @Param('id') id: number,
+    @Body() updateProfileDto: UpdateProfileDto,
+  ) {
+    const profile = await this.profileService.findOne(+id);
+    if (profile.userId === req.user.id) {
+      return this.profileService.update(+id, updateProfileDto);
+    } else {
+      throw new HttpException('권한 없음', HttpStatus.FORBIDDEN);
+    }
   }
 
   @Delete(':id')

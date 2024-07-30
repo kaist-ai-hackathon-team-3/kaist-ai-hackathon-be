@@ -83,4 +83,7 @@ export class CreateProfileDto {
     '기타',
   ])
   targetFeature: string;
+
+  @ApiProperty({ description: '프로필을 생성한 유저의 id' })
+  userId: number;
 }

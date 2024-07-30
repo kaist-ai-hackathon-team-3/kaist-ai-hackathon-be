@@ -23,6 +23,14 @@ export class ProfileService {
     });
   }
 
+  findByUser(userId: number) {
+    return this.prismaService.profile.findMany({
+      where: {
+        userId: userId,
+      },
+    });
+  }
+
   async update(id: number, updateProfileDto: UpdateProfileDto) {
     await this.prismaService.profile.update({
       where: {
