@@ -68,7 +68,12 @@ export class ProfileController {
   @ApiParam({ name: 'id', required: true, description: '프로필 ID' })
   @ApiResponse({ status: 200, description: '성공' })
   @ApiResponse({ status: 404, description: '프로필을 찾을 수 없음' })
-  remove(@Param('id') id: string) {
-    return this.profileService.remove(+id);
+  async remove(@Request() req, @Param('id') id: string) {
+    const profile = await this.profileService.findOne(+id);
+    if (profile.userId === req.user.id) {
+      return this.profileService.remove(+id);
+    } else {
+      throw new HttpException('권한 없음', HttpStatus.FORBIDDEN);
+    }
   }
 }
