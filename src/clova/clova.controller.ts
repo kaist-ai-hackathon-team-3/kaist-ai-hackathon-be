@@ -22,7 +22,7 @@ export class ClovaController {
     description: 'Response from the Clova chat service',
     schema: {
       example: {
-        reply: 'Hello! How can I assist you today?',
+        content: 'Hello! How can I assist you today?',
       },
     },
   })
