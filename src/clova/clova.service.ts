@@ -22,7 +22,7 @@ export class ClovaService {
       ],
     };
 
-    console.log(process.env.X_NCP_CLOVASTUDIO_API_KEY);
+    // console.log(process.env.X_NCP_CLOVASTUDIO_API_KEY);
     const headers = {
       'X-NCP-CLOVASTUDIO-API-KEY': this.configService.get<string>(
         'X_NCP_CLOVASTUDIO_API_KEY',

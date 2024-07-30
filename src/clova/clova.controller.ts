@@ -24,7 +24,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 export class ClovaController {
   constructor(private clovaService: ClovaService) {}
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Post('chat')
   @ApiOperation({ summary: 'Send a message to the Clova chat service' })
   @ApiBody({
@@ -46,13 +46,19 @@ export class ClovaController {
   })
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
-  async chat(@Req() req, @Body() data: any): Promise<any> {
-    console.log(req.user);
-    const userId = req.user.id;
+  async chat(@Body() data: any): Promise<any> {
+    const userId = 1;
     const response = await this.clovaService.postchat(data, userId);
     await this.clovaService.saveConversation(data, response, userId);
     return response;
   }
+  // async chat(@Req() req, @Body() data: any): Promise<any> {
+  //   console.log(req.user);
+  //   const userId = req.user.id;
+  //   const response = await this.clovaService.postchat(data, userId);
+  //   await this.clovaService.saveConversation(data, response, userId);
+  //   return response;
+  // }
 
   @UseGuards(JwtAuthGuard)
   @Get('conversations/:userId')
