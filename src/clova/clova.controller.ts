@@ -74,11 +74,16 @@ export class ClovaController {
     return this.clovaService.getConversations(parseInt(userId));
   }
 
-  @Get('newChatRoom')
+  @Get('newChatRoom/:userId')
   @ApiOperation({ summary: '대화 시작할 때 새로운 방 번호 부여' })
+  @ApiParam({
+    name: 'userId',
+    description: 'ID of the user who is starting a new chat room',
+    type: Number,
+  })
   @ApiResponse({
     status: 200,
-    description: 'The new chat room ID incremented by 1',
+    description: 'The new chat room ID',
     schema: {
       example: {
         newChatRoomId: 2,
@@ -86,8 +91,8 @@ export class ClovaController {
     },
   })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
-  async getNextChatRoomId(): Promise<any> {
-    return this.clovaService.getNextChatRoomId();
+  async getNextChatRoomId(@Param('userId') userId: string): Promise<any> {
+    return this.clovaService.getNextChatRoomId(parseInt(userId));
   }
 
   @Get('chatroom/:roomId')
