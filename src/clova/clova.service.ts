@@ -80,21 +80,17 @@ export class ClovaService {
     });
   }
 
-  async getConversations(userId: number): Promise<any[]> {
-    return this.prisma.conversation.findMany({
+  async getConversations(userId: number): Promise<number[]> {
+    const chatRooms = await this.prisma.chatRoom.findMany({
       where: {
-        chatRooms: {
-          some: {
-            chatRoom: {
-              userId,
-            },
-          },
-        },
+        userId,
       },
-      include: {
-        chatRooms: true,
+      select: {
+        id: true,
       },
     });
+
+    return chatRooms.map((room) => room.id);
   }
 
   async getNextChatRoomId(userId: number): Promise<any> {
