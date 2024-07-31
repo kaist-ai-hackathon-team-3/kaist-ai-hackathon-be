@@ -3,19 +3,21 @@ import { UpdatePolicyDto } from './dto/update-policy.dto';
 import { HttpService } from '@nestjs/axios';
 import { firstValueFrom } from 'rxjs';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class PolicyService {
   constructor(
     private httpService: HttpService,
     private prismaService: PrismaService,
+    private configService: ConfigService,
   ) {}
 
   async getApi() {
     try {
       const response = await firstValueFrom(
         this.httpService.post(
-          'https://api.odcloud.kr/api/gov24/v3/serviceDetail?page=1&perPage=2000&serviceKey=tMW7HjUow9pR8Otha9TtbcOEGHeGdAZBSo%2Fq%2FkTzXKodD%2Fi%2BvzXdcCMY0tyzq%2FrVRmT%2FdYRdZVNHL%2BoH%2FMC6Tg%3D%3D',
+          this.configService.get<string>('GOV_OPENAPI_URL'),
         ),
       );
 
