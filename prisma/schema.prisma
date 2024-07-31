@@ -79,19 +79,28 @@ model PolicyOnUsers {
 }
 
 model ChatRoom {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  user      user     @relation(fields: [userId], references: [id])
-  conversations Conversation[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int            @id @default(autoincrement())
+  roomId        Int
+  userId        Int
+  user          user           @relation(fields: [userId], references: [id])
+  conversations RoomConversation[] // 여러 개의 Conversation이 이 chatRoom과 관련될 수 있음
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
 }
 
 model Conversation {
-  id        Int      @id @default(autoincrement())
-  chatRoomId Int
-  chatRoom  ChatRoom @relation(fields: [chatRoomId], references: [id])
-  messages  Json     // 대화 메시지를 JSON 형태로 저장
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           Int               @id @default(autoincrement())
+  messages     Json              // 대화 메시지를 JSON 형태로 저장
+  chatRooms    RoomConversation[] // 여러 개의 ChatRoom이 이 Conversation과 관련될 수 있음
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+}
+
+// 중간 모델 생성
+model RoomConversation {
+  chatRoomId     Int
+  conversationId Int
+  chatRoom       ChatRoom      @relation(fields: [chatRoomId], references: [id])
+  conversation   Conversation  @relation(fields: [conversationId], references: [id])
+  @@id([chatRoomId, conversationId])
 }

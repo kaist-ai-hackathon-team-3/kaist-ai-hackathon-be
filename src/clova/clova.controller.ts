@@ -42,7 +42,6 @@ export class ClovaController {
     return response;
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('conversations/:userId')
   @ApiOperation({ summary: 'Get all conversations for a user' })
   @ApiParam({
@@ -72,6 +71,22 @@ export class ClovaController {
   @ApiResponse({ status: 404, description: 'User not found' })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   async getConversations(@Param('userId') userId: string): Promise<any[]> {
-    return this.clovaService.getConversations(userId);
+    return this.clovaService.getConversations(parseInt(userId));
+  }
+
+  @Get('newChatRoom')
+  @ApiOperation({ summary: '대화 시작할 때 새로운 방 번호 부여' })
+  @ApiResponse({
+    status: 200,
+    description: 'The new chat room ID incremented by 1',
+    schema: {
+      example: {
+        newChatRoomId: 2,
+      },
+    },
+  })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  async getNextChatRoomId(): Promise<any> {
+    return this.clovaService.getNextChatRoomId();
   }
 }
