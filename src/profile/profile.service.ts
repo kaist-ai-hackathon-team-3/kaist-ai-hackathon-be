@@ -8,6 +8,16 @@ export class ProfileService {
   constructor(private prismaService: PrismaService) {}
 
   async create(createProfileDto: CreateProfileDto) {
+    // Check if the user exists
+    const userExists = await this.prismaService.user.findUnique({
+      where: { id: createProfileDto.userId },
+    });
+
+    if (!userExists) {
+      throw new Error('User does not exist');
+    }
+
+    // Create the profile
     return this.prismaService.profile.create({ data: createProfileDto });
   }
 
