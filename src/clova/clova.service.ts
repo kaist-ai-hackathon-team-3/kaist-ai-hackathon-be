@@ -61,6 +61,7 @@ export class ClovaService {
       chatRoom = await this.prisma.chatRoom.create({
         data: {
           userId,
+          roomTitle: '',
         },
       });
     }
@@ -97,6 +98,7 @@ export class ClovaService {
     const newChatRoom = await this.prisma.chatRoom.create({
       data: {
         userId,
+        roomTitle: '',
       },
     });
 
@@ -140,7 +142,20 @@ export class ClovaService {
       messages: `다음 내용을 제목 형식으로 요약해줘. 너가 지금 주는 답변 그대로 내가 제목으로 쓸 거기 때문에 반드시 다른 어떤 말도 하지 말고 그냥 요약문 딱 하나만 줘. 다음은 대화 내역이야. ${oldestConversation.messages}`,
     };
 
-    const summary = await this.postchat(postMessage);
-    return summary;
+    const summaryResponse = await this.postchat(postMessage);
+    const summaryContent = summaryResponse.content;
+
+    // 채팅룸의 제목을 업데이트합니다.
+    await this.prisma.chatRoom.update({
+      where: {
+        id: chatRoomId,
+      },
+      data: {
+        roomTitle: summaryContent,
+      },
+    });
+
+    // 업데이트된 제목을 반환합니다.
+    return summaryContent;
   }
 }

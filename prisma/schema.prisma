@@ -82,6 +82,7 @@ model ChatRoom {
   id            Int            @id @default(autoincrement())
   userId        Int
   user          user           @relation(fields: [userId], references: [id])
+  roomTitle     String
   conversations RoomConversation[] // 여러 개의 Conversation이 이 chatRoom과 관련될 수 있음
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
@@ -95,7 +96,6 @@ model Conversation {
   updatedAt    DateTime          @updatedAt
 }
 
-// 중간 모델 생성
 model RoomConversation {
   chatRoomId     Int
   conversationId Int

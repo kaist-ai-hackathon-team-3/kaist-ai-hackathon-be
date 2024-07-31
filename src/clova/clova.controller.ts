@@ -158,7 +158,6 @@ export class ClovaController {
       );
       return { summary };
     } catch (error) {
-      // 예외 처리: 오류에 따라 적절한 HTTP 상태 코드와 메시지를 반환합니다.
       if (error instanceof HttpException) {
         throw error;
       }
