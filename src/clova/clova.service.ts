@@ -100,13 +100,33 @@ export class ClovaService {
     }));
   }
 
-  async getNextChatRoomId(userId: number): Promise<any> {
+  async getNextChatRoomId(userId: number, profileId: number): Promise<any> {
+    const profile = await this.prisma.profile.findUnique({
+      where: {
+        id: profileId,
+      },
+    });
+
+    if (!profile) {
+      throw new Error(`Profile with id ${profileId} not found`);
+    }
+    console.log(profile);
+
     const newChatRoom = await this.prisma.chatRoom.create({
       data: {
         userId,
         roomTitle: '',
+        profileId,
       },
     });
+
+    const postMessage = {
+      messages: `내가 사는 곳: ${profile.region}, 나의 성별: ${profile.gender}, 나의 나이: ${profile.age}, 나의 occupation: ${profile.occupation}, 우리 집 가족 구성원 수: ${profile.householdSize}, 우리 집 소득: ${profile.householdIncome}만 원, 나의 특이사항: ${profile.targetFeature}이야. 앞으로 대화가 끝나기 전까지 나의 정보를 절대 까먹지 말고 꼭 기억하고 앞으로의 질문에 답변해 줘. 명심해.`,
+    };
+
+    const summaryResponse = await this.postchat(postMessage);
+    console.log(summaryResponse);
+    await this.saveConversation(postMessage, summaryResponse, userId);
 
     return { newChatRoomId: newChatRoom.id };
   }
