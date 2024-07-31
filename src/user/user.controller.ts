@@ -1,4 +1,11 @@
-import { Controller, Delete, Get, Request, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  NotFoundException,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { UserService } from './user.service';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
@@ -16,7 +23,7 @@ export class UserController {
     return this.userService.getUsers();
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Get('me')
   @ApiOperation({ summary: '로그인한 유저의 정보를 가져옵니다.' })
   @ApiResponse({
@@ -25,11 +32,22 @@ export class UserController {
     type: UserDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  getMe(@Request() req): any {
-    return req.user;
+  async getMe(@Request() req): Promise<any> {
+    // const userId = req.user.id;
+    const userId = 1;
+    const user = await this.userService.getUserById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return {
+      ...user,
+      kakaoId: user.kakaoId ? user.kakaoId.toString() : null,
+    };
   }
 
-  @UseGuards(JwtAuthGuard)
+  // @UseGuards(JwtAuthGuard)
   @Delete(':id')
   @ApiOperation({ summary: 'Delete a user by ID' })
   @ApiParam({

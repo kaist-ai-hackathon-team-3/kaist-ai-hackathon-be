@@ -42,14 +42,18 @@ export class UserService {
   }
 
   //get
-  async getUserById(id: number): Promise<UserDto> {
+  async getUserById(userId: number) {
     return this.prisma.user.findUnique({
-      where: { id },
-      select: {
-        id: true,
-        email: true,
-        username: true,
-        profile: true,
+      where: { id: userId },
+      include: {
+        profile: true, // 프로필 정보를 포함
+        chatRooms: true, // 사용자의 채팅방 정보를 포함
+        refreshTokens: true, // 사용자의 리프레시 토큰 정보를 포함
+        policies: {
+          include: {
+            policy: true, // 사용자가 구독한 정책 정보를 포함
+          },
+        },
       },
     });
   }
