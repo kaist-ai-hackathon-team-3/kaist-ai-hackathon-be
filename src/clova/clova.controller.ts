@@ -15,9 +15,9 @@ export class ClovaController {
   constructor(private clovaService: ClovaService) {}
 
   @Post('chat')
-  @ApiOperation({ summary: 'Send a message to the Clova chat service' })
+  @ApiOperation({ summary: '클로버 AI에게 대화 전달' })
   @ApiBody({
-    description: 'Payload containing the chat message data',
+    description: '채팅 messages를 담고 있는 객체',
     schema: {
       example: {
         messages: 'Hello, Clova!',
@@ -26,7 +26,7 @@ export class ClovaController {
   })
   @ApiResponse({
     status: 200,
-    description: 'Response from the Clova chat service',
+    description: '클로버 AI가 전달한 답장',
     schema: {
       example: {
         content: 'Hello! How can I assist you today?',
@@ -37,7 +37,7 @@ export class ClovaController {
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   async chat(@Body() data: any): Promise<any> {
     const userId = 1;
-    const response = await this.clovaService.postchat(data, +userId);
+    const response = await this.clovaService.postchat(data);
     await this.clovaService.saveConversation(data, response, +userId);
     return response;
   }
