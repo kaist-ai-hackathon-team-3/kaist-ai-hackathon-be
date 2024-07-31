@@ -86,4 +86,8 @@ export class CreateProfileDto {
 
   @ApiProperty({ description: '프로필을 생성한 유저의 id' })
   userId: number;
+
+  @ApiProperty({ description: '나이', example: 30 })
+  @IsInt()
+  age: number;
 }
