@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Param,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { ClovaService } from './clova.service';
 import {
   ApiTags,
@@ -116,5 +125,47 @@ export class ClovaController {
     @Param('roomId') roomId: string,
   ): Promise<any[]> {
     return this.clovaService.getChatRoomConversations(parseInt(roomId));
+  }
+
+  @Get('chatroom/:chatRoomId/summary')
+  @ApiOperation({
+    summary: '첫 대화 기반으로 채팅방 제목 생성',
+  })
+  @ApiParam({
+    name: 'chatRoomId',
+    description: 'ID of the chat room',
+    type: Number,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Summary of the oldest conversation in the chat room',
+    schema: {
+      example: {
+        summary: {
+          content: '배고픔 표현에 대한 음식 추천 제안',
+        },
+      },
+    },
+  })
+  @ApiResponse({ status: 404, description: 'Conversation not found' })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  async getOldestConversationSummary(
+    @Param('chatRoomId') chatRoomId: string,
+  ): Promise<{ summary: string }> {
+    try {
+      const summary = await this.clovaService.summarizeOldestConversation(
+        parseInt(chatRoomId, 10),
+      );
+      return { summary };
+    } catch (error) {
+      // 예외 처리: 오류에 따라 적절한 HTTP 상태 코드와 메시지를 반환합니다.
+      if (error instanceof HttpException) {
+        throw error;
+      }
+      throw new HttpException(
+        'Internal Server Error',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

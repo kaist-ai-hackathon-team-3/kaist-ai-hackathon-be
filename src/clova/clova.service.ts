@@ -118,4 +118,32 @@ export class ClovaService {
       },
     });
   }
+
+  async summarizeOldestConversation(chatRoomId: number): Promise<string> {
+    // 가장 오래된 대화를 찾기
+    const oldestConversation = await this.prisma.conversation.findFirst({
+      where: {
+        chatRooms: {
+          some: {
+            chatRoomId: chatRoomId,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: 'asc',
+      },
+      select: {
+        messages: true,
+      },
+    });
+
+    const postMessage = {
+      messages: `다음 내용을 제목 형식으로 요약해줘. 너가 지금 주는 답변 그대로 내가 제목으로 쓸 거기 때문에 반드시 다른 어떤 말도 하지 말고 그냥 요약문 딱 하나만 줘. 다음은 대화 내역이야. ${oldestConversation.messages}`,
+    };
+
+    // Clova API를 통해 요약 요청 보내기
+    const summary = await this.postchat(postMessage);
+
+    return summary;
+  }
 }
