@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service'; // Prisma 서비스 추가
 import { firstValueFrom } from 'rxjs';
 import { ConfigService } from '@nestjs/config';
+import { JsonValue } from '@prisma/client/runtime/library';
 
 @Injectable()
 export class ClovaService {
@@ -51,30 +52,59 @@ export class ClovaService {
     data: any,
     response: any,
     userId: number,
+    roomId: number,
   ): Promise<void> {
+    // 기존 채팅방 찾기
     let chatRoom = await this.prisma.chatRoom.findFirst({
-      where: { userId },
-      orderBy: { createdAt: 'desc' },
+      where: { id: roomId },
     });
 
     if (!chatRoom) {
-      chatRoom = await this.prisma.chatRoom.create({
-        data: {
-          userId,
-          roomTitle: '',
-        },
-      });
+      throw new Error(`Chat Room with id ${roomId} not found`);
     }
 
+    // 기존 대화 기록 가져오기
+    const previousConversations = await this.prisma.conversation.findMany({
+      where: {
+        chatRooms: {
+          some: {
+            chatRoomId: roomId,
+          },
+        },
+      },
+      orderBy: { createdAt: 'asc' },
+    });
+
+    // 기존 대화 메시지 배열로 변환
+    let updatedMessages: { role: string; content: string }[] = [];
+
+    previousConversations.forEach((conv) => {
+      if (isValidJsonString(conv.messages.toString())) {
+        const messages = parseMessages(conv.messages.toString());
+        if (Array.isArray(messages)) {
+          updatedMessages = [...updatedMessages, ...messages];
+        } else {
+          console.error('Parsed messages is not an array:', messages);
+        }
+      } else {
+        console.error('Invalid JSON format:', conv.messages);
+      }
+    });
+
+    // 새로운 메시지 추가
+    updatedMessages.push(
+      { role: 'user', content: data.messages },
+      { role: 'assistant', content: response.content },
+    );
+
+    // 대화 저장
+    // 예시: 저장 시 JSON 문자열로 변환
     await this.prisma.conversation.create({
       data: {
-        messages: JSON.stringify([
-          { role: 'user', content: data.messages },
-          { role: 'assistant', content: response.content },
-        ]),
+        messages: JSON.stringify(updatedMessages), // 배열을 JSON 문자열로 저장
         chatRooms: {
           create: {
-            chatRoomId: chatRoom.id,
+            chatRoomId: roomId,
           },
         },
       },
@@ -110,13 +140,12 @@ export class ClovaService {
     if (!profile) {
       throw new Error(`Profile with id ${profileId} not found`);
     }
-    console.log(profile);
 
     const newChatRoom = await this.prisma.chatRoom.create({
       data: {
         userId,
-        roomTitle: '',
         profileId,
+        roomTitle: '',
       },
     });
 
@@ -125,8 +154,12 @@ export class ClovaService {
     };
 
     const summaryResponse = await this.postchat(postMessage);
-    console.log(summaryResponse);
-    await this.saveConversation(postMessage, summaryResponse, userId);
+    await this.saveConversation(
+      postMessage,
+      summaryResponse,
+      userId,
+      profileId,
+    );
 
     return { newChatRoomId: newChatRoom.id };
   }
@@ -183,5 +216,22 @@ export class ClovaService {
 
     // 업데이트된 제목을 반환합니다.
     return summaryContent;
+  }
+}
+function parseMessages(messages: string): any[] {
+  try {
+    return JSON.parse(messages);
+  } catch (e) {
+    console.error('Error parsing JSON:', e);
+    return [];
+  }
+}
+
+function isValidJsonString(str: string): boolean {
+  try {
+    JSON.parse(str);
+    return true;
+  } catch {
+    return false;
   }
 }

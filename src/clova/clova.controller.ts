@@ -30,6 +30,7 @@ export class ClovaController {
     schema: {
       example: {
         messages: 'Hello, Clova!',
+        roomId: 1, // profileId 대신 roomId 추가
       },
     },
   })
@@ -45,9 +46,10 @@ export class ClovaController {
   @ApiResponse({ status: 400, description: 'Bad Request' })
   @ApiResponse({ status: 500, description: 'Internal Server Error' })
   async chat(@Body() data: any): Promise<any> {
-    const userId = 1;
+    const userId = 1; // 실제로는 인증된 사용자 ID를 받아와야 합니다.
+    const { roomId } = data; // profileId 대신 roomId를 받음
     const response = await this.clovaService.postchat(data);
-    await this.clovaService.saveConversation(data, response, +userId);
+    await this.clovaService.saveConversation(data, response, userId, roomId);
     return response;
   }
 
