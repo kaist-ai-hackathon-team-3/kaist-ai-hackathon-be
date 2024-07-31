@@ -89,4 +89,38 @@ export class ClovaController {
   async getNextChatRoomId(): Promise<any> {
     return this.clovaService.getNextChatRoomId();
   }
+
+  @Get('chatroom/:roomId')
+  @ApiOperation({ summary: 'Get all conversations for a chat room' })
+  @ApiParam({
+    name: 'roomId',
+    description: 'ID of the chat room whose conversations are to be retrieved',
+    type: Number,
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'List of conversations for the chat room',
+    schema: {
+      example: [
+        {
+          id: 1,
+          chatRoomId: 1,
+          messages: [
+            { role: 'user', content: 'Hello!' },
+            { role: 'assistant', content: 'Hi there!' },
+          ],
+          createdAt: '2024-07-30T00:00:00.000Z',
+          updatedAt: '2024-07-30T00:00:00.000Z',
+        },
+      ],
+    },
+  })
+  @ApiResponse({ status: 400, description: 'Bad Request' })
+  @ApiResponse({ status: 404, description: 'Chat Room not found' })
+  @ApiResponse({ status: 500, description: 'Internal Server Error' })
+  async getChatRoomConversations(
+    @Param('roomId') roomId: string,
+  ): Promise<any[]> {
+    return this.clovaService.getChatRoomConversations(parseInt(roomId));
+  }
 }

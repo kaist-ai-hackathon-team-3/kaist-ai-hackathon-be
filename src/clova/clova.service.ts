@@ -52,13 +52,18 @@ export class ClovaService {
     response: any,
     userId: number,
   ): Promise<void> {
-    const chatRoom = await this.prisma.chatRoom.findFirst({
+    let chatRoom = await this.prisma.chatRoom.findFirst({
       where: { userId },
       orderBy: { createdAt: 'desc' },
     });
 
     if (!chatRoom) {
-      throw new Error('ChatRoom not found');
+      chatRoom = await this.prisma.chatRoom.create({
+        data: {
+          roomId: (await this.getNextChatRoomId()).newChatRoomId,
+          userId,
+        },
+      });
     }
 
     await this.prisma.conversation.create({
@@ -101,5 +106,20 @@ export class ClovaService {
     const newChatRoomId = latestChatRoom ? latestChatRoom.roomId + 1 : 1;
 
     return { newChatRoomId };
+  }
+
+  async getChatRoomConversations(roomId: number): Promise<any[]> {
+    return this.prisma.conversation.findMany({
+      where: {
+        chatRooms: {
+          some: {
+            chatRoomId: roomId,
+          },
+        },
+      },
+      include: {
+        chatRooms: true,
+      },
+    });
   }
 }
