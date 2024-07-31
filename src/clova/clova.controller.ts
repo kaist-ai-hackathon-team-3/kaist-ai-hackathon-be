@@ -48,7 +48,7 @@ export class ClovaController {
   async chat(@Body() data: any): Promise<any> {
     const userId = 1; // 실제로는 인증된 사용자 ID를 받아와야 합니다.
     const { roomId } = data; // profileId 대신 roomId를 받음
-    const response = await this.clovaService.postchat(data);
+    const response = await this.clovaService.postchat(data, roomId);
     await this.clovaService.saveConversation(data, response, userId, roomId);
     return response;
   }
