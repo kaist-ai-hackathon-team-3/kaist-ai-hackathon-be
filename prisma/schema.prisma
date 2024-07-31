@@ -38,10 +38,11 @@ model RefreshToken {
 model Profile {
   id              Int    @id @default(autoincrement())
   user            user?  @relation(fields: [userId], references: [id])
-  name String //프로필 이름
+  name            String //프로필 이름
   userId          Int?
   region          String
   gender          String
+  age             Int
   occupation      String
   householdSize   Int
   householdIncome Int
