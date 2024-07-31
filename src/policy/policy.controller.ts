@@ -35,15 +35,15 @@ export class PolicyController {
   }
 
   @Get()
-  @ApiOperation({ summary: 'Retrieve all policies' })
+  @ApiOperation({ summary: 'db에 저장된 모든 정책 불러오기' })
   @ApiResponse({
     status: 200,
     description: 'List of policies',
-    type: [CreatePolicyDto], // Adjust if you have a specific DTO for responses
+    type: [CreatePolicyDto],
   })
   @ApiResponse({ status: 404, description: 'Not Found' })
   findAll() {
-    return this.policyService.getApi();
+    return this.policyService.findAll();
   }
 
   @Get(':id')

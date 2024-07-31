@@ -120,7 +120,7 @@ export class PolicyService {
   }
 
   findAll() {
-    return `This action returns all policy`;
+    return this.prismaService.policy.findMany();
   }
 
   findOne(id: number) {
@@ -137,8 +137,14 @@ export class PolicyService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} policy`;
+    const serviceID = id.toString();
+    return this.prismaService.policy.delete({
+      where: {
+        serviceID: serviceID,
+      },
+    });
   }
+
   async addUser(policyId: number, userId: number) {
     const stringPolicyId = policyId.toString();
 
