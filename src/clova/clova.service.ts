@@ -185,7 +185,7 @@ export class ClovaService {
       postMessage,
       summaryResponse,
       userId,
-      profileId,
+      newChatRoom.id,
     );
 
     return { newChatRoomId: newChatRoom.id };
