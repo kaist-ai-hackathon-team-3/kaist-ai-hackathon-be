@@ -1,73 +1,68 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# 정책을 말랑하게, 정말
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+![KakaoTalk_20240808_222418461](https://github.com/user-attachments/assets/674b88d8-1213-4087-a23d-ef06e9414770)
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Overview
 
-## Description
+**정말**은 사용자 맞춤 정책 추천 ai 챗봇입니다. 
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+`이런 분들께 추천드려요`
 
-## Installation
+😢 내 주변 지원 정책에는 무엇이 있는지 알고 싶어요
 
-```bash
-$ npm install
-```
+😀 내 상황에 딱 맞는 정책을 검색해서 찾아보는 게 너무 어려워요
 
-## Running the app
+😢 많은 지원 정책들, 다 비슷해 보여요
 
-```bash
-# development
-$ npm run start
+😀 나를 위한 정책을 추천받고 싶어요
 
-# watch mode
-$ npm run start:dev
 
-# production mode
-$ npm run start:prod
-```
 
-## Test
+## Implement
 
-```bash
-# unit tests
-$ npm run test
+1. 정성적인 상황설명을 찰떡같이 알아듣는 챗봇
+   
+    [1.mp4](https://github.com/user-attachments/assets/4d167ef9-b3b0-405f-918b-b1d5798aff13)
+    
+    - 사용자 정보를 상세히 받아 이를 기반으로 정책 추천
+    - 계정을 추가해 가족, 친구의 정책 추천 가능
+    
+    [2.mp4](https://github.com/user-attachments/assets/8a0d8d8a-2ff5-4203-a51e-2f42c9ad0647)
+    
+    - 사용자 맞춤형 UX
+        - 장애인을 위한 Speech-to-Text 기능
+        - 고령층을 위한 반응형 UX
+        - 다문화, 외국인 지원을 위한 번역 기능
+    - 자신이 어떤 상황인지 잘 모른다면?
+        - 정성적 질문에도 정확한 답변이 나오도록, 유도 질문
 
-# e2e tests
-$ npm run test:e2e
+1. 다양한 정책을 카테고리 별로 한 눈에 확인
+   
+    [3.mp4](https://github.com/user-attachments/assets/d2981c06-39ea-4adb-b48b-20aebd330fc4)
+    
+    - 12개의 정책 카테고리
+    
+    - 선택한 카테고리마다 간편한 정책 정보 로드
+    
+      
 
-# test coverage
-$ npm run test:cov
-```
+## Methodology
 
-## Support
+![image 2](https://github.com/user-attachments/assets/7fb9a00c-168e-4da3-86b5-a3a80c2fda51)
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- `naver cloud platform`을 이용한 서버 배포
 
-## Stay in touch
+- 유저의 정성적 질문에서 정량적 지표(성별, 나이, 거주지 등)를 추출하고, 이에 기반해 정책을 추천하도록 `CLOVA X` 프롬프팅
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- 정부24 공공 api를 사용해 최근 정책 정보 로드
 
-## License
+  
 
-Nest is [MIT licensed](LICENSE).
+## Contributors
+
+| 이름 | 포지션 | github |
+| --- | --- | --- |
+| 이재희 | FrontEnd | [@jaehee831](https://github.com/jaehee831/) |
+| 주서현 | FrontEnd | [@seohyj](https://github.com/seohyj) |
+| 이신혁 | BackEnd | [@dawnfire05](https://github.com/dawnfire05) |
+| 김민경 | BackEnd | [@kim-minkyoung](https://github.com/kim-minkyoung) |
