@@ -56,6 +56,12 @@
 
 - 정부24 공공 api를 사용해 최근 정책 정보 로드
 
+
+## Database
+
+![postgres@223 130 141](https://github.com/user-attachments/assets/7efd03a6-86ad-4131-889e-963c6442c624)
+
+
   
 
 ## Contributors
